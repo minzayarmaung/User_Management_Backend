@@ -32,6 +32,8 @@ public class User extends Auditable {
 
     private String otp;
 
+    private String profilePicUrl;
+
     @Column(name = "otp_expired_at")
     private LocalDateTime otpExpiredAt;
 

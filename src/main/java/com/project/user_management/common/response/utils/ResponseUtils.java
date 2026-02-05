@@ -1,7 +1,7 @@
 package com.project.user_management.common.response.utils;
 
-import com._p1m.portfolio.config.response.dto.ApiResponse;
-import com._p1m.portfolio.config.response.dto.PaginatedApiResponse;
+import com.project.user_management.common.response.dto.ApiResponse;
+import com.project.user_management.common.response.dto.PaginatedApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
