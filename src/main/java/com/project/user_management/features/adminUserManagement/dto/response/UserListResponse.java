@@ -3,10 +3,11 @@ package com.project.user_management.features.adminUserManagement.dto.response;
 import lombok.Builder;
 
 @Builder
-public record CreateUserResponse(
+public record UserListResponse(
         Long userId,
-        String username,
         String email,
+        String profilePictureUrl,
+        String username,
+        String status,
         String role
-) {
-}
+) { }

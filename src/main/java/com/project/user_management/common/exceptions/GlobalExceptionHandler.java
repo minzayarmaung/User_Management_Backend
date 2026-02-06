@@ -49,12 +49,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
+    @ExceptionHandler(AuthroizationDeniedException.class)
+    public ResponseEntity<ApiResponse> handleAuthroizationDenicedException(UnauthorizedException ex) {
+        ApiResponse response = ApiResponse.builder()
+                .success(0)
+                .code(403 )
+                .message(ex.getMessage())
+                .meta(Map.of("timestamp", System.currentTimeMillis()))
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiResponse> handleUnauthorizedException(UnauthorizedException ex) {
         ApiResponse response = ApiResponse.builder()
                 .success(0)
                 .code(403)
-                .message(ex.getMessage())
+                .message("Permission Denied.")
                 .meta(Map.of("timestamp", System.currentTimeMillis()))
                 .build();
 
@@ -68,6 +80,19 @@ public class GlobalExceptionHandler {
                 .success(0)
                 .code(500)
                 .message("Something went wrong.")
+                .meta(Map.of("timestamp", System.currentTimeMillis()))
+                .build();
+
+        return ResponseEntity.internalServerError().body(response);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleEntityNotException(Exception ex) {
+
+        ApiResponse response = ApiResponse.builder()
+                .success(0)
+                .code(404)
+                .message("Entity Not Found.")
                 .meta(Map.of("timestamp", System.currentTimeMillis()))
                 .build();
 

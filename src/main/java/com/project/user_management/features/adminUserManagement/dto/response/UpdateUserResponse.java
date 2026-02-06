@@ -3,7 +3,7 @@ package com.project.user_management.features.adminUserManagement.dto.response;
 import lombok.Builder;
 
 @Builder
-public record CreateUserResponse(
+public record UpdateUserResponse(
         Long userId,
         String username,
         String email,

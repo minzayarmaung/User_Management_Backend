@@ -3,7 +3,7 @@ package com.project.user_management.features.adminUserManagement.dto.request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
-public record CreateUserRequest(
+public record UpdateUserRequest(
         @NotEmpty(message = "Username is required.")
         String username,
         @NotEmpty(message = "Email is required.")
