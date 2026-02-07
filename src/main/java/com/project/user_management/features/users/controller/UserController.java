@@ -14,10 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -74,5 +71,32 @@ public class UserController {
                                                     HttpServletResponse httpResponse) {
         final ApiResponse response = userService.refreshToken(request, httpResponse);
         return ResponseUtils.buildResponse(request , response);
+    }
+
+    @Operation(
+            summary = "Get Current User Information",
+            description = "Retrieves the current authenticated user's information from the token in the cookie.",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "200",
+                            description = "User information retrieved successfully.",
+                            content = @Content(schema = @Schema(implementation = ApiResponse.class))
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "401",
+                            description = "Token not found, expired, or invalid.",
+                            content = @Content(schema = @Schema(implementation = ApiResponse.class))
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "404",
+                            description = "User not found.",
+                            content = @Content(schema = @Schema(implementation = ApiResponse.class))
+                    )
+            }
+    )
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse> getCurrentUserInfo(HttpServletRequest request) {
+        final ApiResponse response = this.userService.getCurrentUserInfo(request);
+        return ResponseUtils.buildResponse(request, response);
     }
 }

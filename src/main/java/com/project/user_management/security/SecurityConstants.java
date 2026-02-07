@@ -5,6 +5,8 @@ public class SecurityConstants {
             // Authentication & OAuth
             "/user-management/api/v1/auth/users/signup",
             "/user-management/api/v1/auth/users/login",
+            "/user-management/api/v1/auth/login",
+
 
             // Swagger & API Docs
             "/swagger-ui/**",

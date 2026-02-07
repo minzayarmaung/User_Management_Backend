@@ -4,6 +4,7 @@ import com.project.user_management.data.models.User;
 import com.project.user_management.features.adminUserManagement.dto.response.CreateUserResponse;
 import com.project.user_management.features.adminUserManagement.dto.response.UpdateUserResponse;
 import com.project.user_management.features.adminUserManagement.dto.response.UserListResponse;
+import com.project.user_management.features.adminUserManagement.dto.response.UserResponse;
 import com.project.user_management.features.users.dto.response.SignUpResponse;
 import org.springframework.data.domain.Page;
 
@@ -55,6 +56,20 @@ public class AdminUserManagementMapper {
                 .username(user.getUsername())
                 .status(user.getStatus().name())
                 .role(user.getRole().getName())
+                .build();
+    }
+
+    public static UserResponse mapUserResponse(User entity) {
+        if(entity == null) return null;
+
+        return UserResponse.builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .email(entity.getEmail())
+                .role(entity.getRole().getName())
+                .profilePicUrl(entity.getProfilePicUrl())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 }

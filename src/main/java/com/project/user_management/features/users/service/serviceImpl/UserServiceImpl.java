@@ -1,11 +1,13 @@
 package com.project.user_management.features.users.service.serviceImpl;
 
 import com.project.user_management.common.exceptions.DuplicateEntityException;
+import com.project.user_management.common.exceptions.EntityNotFoundException;
 import com.project.user_management.common.response.dto.ApiResponse;
 import com.project.user_management.data.models.Role;
 import com.project.user_management.data.models.User;
 import com.project.user_management.data.respositories.RoleRepository;
 import com.project.user_management.data.respositories.UserRepository;
+import com.project.user_management.features.adminUserManagement.dto.response.UserInfoResponse;
 import com.project.user_management.features.users.dto.request.LoginRequest;
 import com.project.user_management.features.users.dto.request.SignupRequest;
 import com.project.user_management.features.users.dto.response.LoginResponse;
@@ -24,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -148,6 +151,70 @@ public class UserServiceImpl implements UserService {
                 .data(loginResponse)
                 .meta(Map.of("timestamp", System.currentTimeMillis()))
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse getCurrentUserInfo(HttpServletRequest request) {
+        try {
+            String token = jwtUtil.extractTokenFromRequest(request);
+
+            if (token == null) {
+                return ApiResponse.builder()
+                        .success(0)
+                        .code(401)
+                        .message("Token not found. Please provide a valid token.")
+                        .data(null)
+                        .build();
+            }
+
+            String email = jwtUtil.extractEmail(token);
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found for email: " + email));
+
+            UserInfoResponse userInfo = UserInfoResponse.builder()
+                    .userId(user.getId())
+                    .username(user.getUsername())
+                    .email(user.getEmail())
+                    .roleId(user.getRole() != null ? user.getRole().getId() : null)
+                    .role(user.getRole() != null ? user.getRole().getName() : null)
+                    .build();
+
+            return ApiResponse.builder()
+                    .success(1)
+                    .code(200)
+                    .message("User information retrieved successfully.")
+                    .data(userInfo)
+                    .build();
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            return ApiResponse.builder()
+                    .success(0)
+                    .code(401)
+                    .message("Token has expired. Please refresh your token.")
+                    .data(null)
+                    .build();
+        } catch (io.jsonwebtoken.JwtException e) {
+            return ApiResponse.builder()
+                    .success(0)
+                    .code(401)
+                    .message("Invalid token.")
+                    .data(null)
+                    .build();
+        } catch (EntityNotFoundException e) {
+            return ApiResponse.builder()
+                    .success(0)
+                    .code(404)
+                    .message(e.getMessage())
+                    .data(null)
+                    .build();
+        } catch (Exception e) {
+            return ApiResponse.builder()
+                    .success(0)
+                    .code(500)
+                    .message("Internal server error: " + e.getMessage())
+                    .data(null)
+                    .build();
+        }
     }
 
     private void addCookie(HttpServletResponse response, String name, String value, int maxAge, String path) {

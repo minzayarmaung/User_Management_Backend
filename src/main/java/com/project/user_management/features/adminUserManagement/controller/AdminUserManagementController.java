@@ -104,6 +104,23 @@ public class AdminUserManagementController {
     }
 
     @Operation(
+            summary = "Activate user by User ID",
+            description = "Activate a user by its ID",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "User reactivated successfully.")
+            }
+    )
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/reactivate/{id}")
+    public ResponseEntity<ApiResponse> reactivateUser(
+            @PathVariable Long id,
+            HttpServletRequest request
+    ) {
+        ApiResponse response = adminUserManagementService.reactivateUser(id, request);
+        return ResponseUtils.buildResponse(request, response);
+    }
+
+    @Operation(
             summary = "Get all users with pagination",
             description = "Retrieve all users with pagination and optional keyword search",
             responses = {
@@ -134,5 +151,23 @@ public class AdminUserManagementController {
 
         PaginatedApiResponse<UserListResponse> response = adminUserManagementService.getAllUsers(keyword, includeAdmins, includeBanUsers, pageable);
         return ResponseEntity.ok(response);
+    }
+
+
+    @Operation(
+            summary = "Get user details by User ID",
+            description = "Retrieve a user by its ID",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "User retrieved successfully"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "User not found")
+            }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getUserById(
+            @Parameter(description = "User ID", required = true)
+            @PathVariable Long id,
+            HttpServletRequest httpRequest) {
+        ApiResponse response = adminUserManagementService.getUserById(id);
+        return ResponseUtils.buildResponse(httpRequest, response);
     }
 }

@@ -21,6 +21,7 @@ import com.project.user_management.features.adminUserManagement.dto.request.Upda
 import com.project.user_management.features.adminUserManagement.dto.response.CreateUserResponse;
 import com.project.user_management.features.adminUserManagement.dto.response.UpdateUserResponse;
 import com.project.user_management.features.adminUserManagement.dto.response.UserListResponse;
+import com.project.user_management.features.adminUserManagement.dto.response.UserResponse;
 import com.project.user_management.features.adminUserManagement.mapper.AdminUserManagementMapper;
 import com.project.user_management.features.adminUserManagement.service.AdminUserManagementService;
 import com.project.user_management.security.JWT.JWTUtil;
@@ -240,6 +241,75 @@ public class AdminUserManagementServiceImpl implements AdminUserManagementServic
                 .message("Users retrieved successfully.")
                 .meta(meta)
                 .data(userResponses)
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApiResponse getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        UserResponse response = AdminUserManagementMapper.mapUserResponse(user);
+
+        return ApiResponse.builder()
+                .success(1)
+                .code(HttpStatus.OK.value())
+                .message("User retrieved successfully.")
+                .data(response)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse reactivateUser(Long id, HttpServletRequest request) {
+
+        User targetUser = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        String token = jwtUtil.extractTokenFromRequest(request);
+        User currentLogin = auditHelper.getUserFromToken(token);
+
+        if (currentLogin.getId().equals(targetUser.getId())) {
+            return ApiResponse.builder()
+                    .success(0)
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .message("You cannot reactivate yourself.")
+                    .data(false)
+                    .build();
+        }
+
+        boolean targetIsAdmin = targetUser.getRole() != null
+                && ROLE.ADMIN.name().equals(targetUser.getRole().getName());
+
+        if (targetIsAdmin) {
+            return ApiResponse.builder()
+                    .success(0)
+                    .code(HttpStatus.FORBIDDEN.value())
+                    .message("Admin users cannot be reactivated.")
+                    .data(false)
+                    .build();
+        }
+
+        BanRecord banRecord = targetUser.getBanRecord();
+        if (banRecord == null || targetUser.getStatus() != Status.INACTIVE) {
+            return ApiResponse.builder()
+                    .success(0)
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .message("User is not banned.")
+                    .data(false)
+                    .build();
+        }
+
+        targetUser.setBanRecord(null);
+        targetUser.setStatus(Status.ACTIVE);
+        userRepository.save(targetUser);
+
+        return ApiResponse.builder()
+                .success(1)
+                .code(HttpStatus.OK.value())
+                .message("User reactivated successfully.")
+                .data(true)
                 .build();
     }
 }

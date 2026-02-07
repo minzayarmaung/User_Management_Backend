@@ -15,4 +15,6 @@ public interface UserService {
     ApiResponse refreshToken(HttpServletRequest request, HttpServletResponse httpResponse);
 
     ApiResponse loginUser(LoginRequest loginRequest, HttpServletResponse httpResponse);
+
+    ApiResponse getCurrentUserInfo(HttpServletRequest request);
 }

@@ -3,6 +3,7 @@ package com.project.user_management.data.models;
 import com.project.user_management.data.common.Auditable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class BanRecord extends Auditable {
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true, nullable = false)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "admin_id", referencedColumnName = "id", unique = true, nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "admin_id", referencedColumnName = "id", nullable = false)
     private User bannedBy;
 }

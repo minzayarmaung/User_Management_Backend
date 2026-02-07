@@ -19,4 +19,8 @@ public interface AdminUserManagementService {
     ApiResponse banUser(Long id, @NotBlank String description, HttpServletRequest httpRequest);
 
     PaginatedApiResponse<UserListResponse> getAllUsers(String keyword, boolean includeAdmins , boolean includeBanUsers , Pageable pageable);
+
+    ApiResponse getUserById(Long id);
+
+    ApiResponse reactivateUser(Long id, HttpServletRequest request);
 }
