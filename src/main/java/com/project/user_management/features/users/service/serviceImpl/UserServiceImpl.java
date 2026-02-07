@@ -1,5 +1,6 @@
 package com.project.user_management.features.users.service.serviceImpl;
 
+import com.project.user_management.common.config.CookieConfig;
 import com.project.user_management.common.exceptions.DuplicateEntityException;
 import com.project.user_management.common.exceptions.EntityNotFoundException;
 import com.project.user_management.common.response.dto.ApiResponse;
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
     private final JWTUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authManager;
+    private final CookieConfig cookieConfig;
 
 
     @Override
@@ -62,9 +64,10 @@ public class UserServiceImpl implements UserService {
         // Set Token to Cookies
         String accessToken = jwtUtil.generateToken(signupRequest.email());
         String refreshToken = jwtUtil.generateRefreshToken(signupRequest.email());
-        addCookie(httpResponse, "accessToken", accessToken, (int) (jwtUtil.ACCESS_TOKEN_VALID_TIME_MILLIS() / 1000),"/");
-        addCookie(httpResponse, "refreshToken", refreshToken, (int)
-                (jwtUtil.REFRESH_TOKEN_VALID_TIME_MILLIS() / 1000),"/user-management/api/v1/auth/users/refresh");
+        cookieConfig.addSecureCookie(httpResponse, "accessToken", accessToken,
+                (int) (jwtUtil.ACCESS_TOKEN_VALID_TIME_MILLIS() / 1000), "/");
+        cookieConfig.addSecureCookie(httpResponse, "refreshToken", refreshToken,
+                (int) (jwtUtil.REFRESH_TOKEN_VALID_TIME_MILLIS() / 1000), "/");
 
         SignUpResponse signUpResponse = UserMapper.mapUserToSignUpResponse(savedUser);
 
@@ -97,8 +100,10 @@ public class UserServiceImpl implements UserService {
             if (jwtUtil.validateToken(refreshToken, userDetails)) {
                 String newAccessToken = jwtUtil.generateToken(email);
                 String newRefreshToken = jwtUtil.generateRefreshToken(email);
-                addCookie(response, "accessToken", newAccessToken, (int) (jwtUtil.ACCESS_TOKEN_VALID_TIME_MILLIS() / 1000),"/");
-                addCookie(response, "refreshToken", newRefreshToken, (int) (jwtUtil.REFRESH_TOKEN_VALID_TIME_MILLIS() / 1000),"/user-management/api/v1/auth/users/refresh");
+                cookieConfig.addSecureCookie(response, "accessToken", newAccessToken,
+                        (int) (jwtUtil.ACCESS_TOKEN_VALID_TIME_MILLIS() / 1000), "/");
+                cookieConfig.addSecureCookie(response, "refreshToken", newRefreshToken,
+                        (int) (jwtUtil.REFRESH_TOKEN_VALID_TIME_MILLIS() / 1000), "/");
                 return ApiResponse.builder()
                         .success(1)
                         .code(200)
@@ -138,9 +143,10 @@ public class UserServiceImpl implements UserService {
         // Set Token to Cookies
         String accessToken = jwtUtil.generateToken(loginRequest.email());
         String refreshToken = jwtUtil.generateRefreshToken(loginRequest.email());
-        addCookie(httpResponse, "accessToken", accessToken, (int) (jwtUtil.ACCESS_TOKEN_VALID_TIME_MILLIS() / 1000),"/");
-        addCookie(httpResponse, "refreshToken", refreshToken, (int)
-                (jwtUtil.REFRESH_TOKEN_VALID_TIME_MILLIS() / 1000),"/user-management/api/v1/auth/users/refresh");
+        cookieConfig.addSecureCookie(httpResponse, "accessToken", accessToken,
+                (int) (jwtUtil.ACCESS_TOKEN_VALID_TIME_MILLIS() / 1000), "/");
+        cookieConfig.addSecureCookie(httpResponse, "refreshToken", refreshToken,
+                (int) (jwtUtil.REFRESH_TOKEN_VALID_TIME_MILLIS() / 1000), "/");
 
         LoginResponse loginResponse = UserMapper.mapUserToLogInResponse(existingUser.get());
 
