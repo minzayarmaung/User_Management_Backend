@@ -66,6 +66,7 @@ public class AdminUserManagementMapper {
                 .id(entity.getId())
                 .username(entity.getUsername())
                 .email(entity.getEmail())
+                .status(entity.getStatus().name())
                 .role(entity.getRole().getName())
                 .profilePicUrl(entity.getProfilePicUrl())
                 .createdAt(entity.getCreatedAt())

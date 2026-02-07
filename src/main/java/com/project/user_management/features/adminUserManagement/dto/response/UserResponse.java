@@ -10,6 +10,7 @@ public record UserResponse(
         String username,
         String email,
         String role,
+        String status,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         String profilePicUrl
