@@ -1,11 +1,10 @@
-package com.project.user_management.features.adminUserManagement.mapper;
+package com.project.user_management.features.admin.adminUserManagement.mapper;
 
 import com.project.user_management.data.models.User;
-import com.project.user_management.features.adminUserManagement.dto.response.CreateUserResponse;
-import com.project.user_management.features.adminUserManagement.dto.response.UpdateUserResponse;
-import com.project.user_management.features.adminUserManagement.dto.response.UserListResponse;
-import com.project.user_management.features.adminUserManagement.dto.response.UserResponse;
-import com.project.user_management.features.users.dto.response.SignUpResponse;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.CreateUserResponse;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.UpdateUserResponse;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.UserListResponse;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.UserResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.Collections;

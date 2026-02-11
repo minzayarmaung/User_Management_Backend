@@ -1,13 +1,12 @@
-package com.project.user_management.features.adminUserManagement.controller;
+package com.project.user_management.features.admin.adminUserManagement.controller;
 
 import com.project.user_management.common.response.dto.ApiResponse;
 import com.project.user_management.common.response.dto.PaginatedApiResponse;
 import com.project.user_management.common.response.utils.ResponseUtils;
-import com.project.user_management.features.adminUserManagement.dto.request.CreateUserRequest;
-import com.project.user_management.features.adminUserManagement.dto.request.UpdateUserRequest;
-import com.project.user_management.features.adminUserManagement.dto.response.UserListResponse;
-import com.project.user_management.features.adminUserManagement.service.AdminUserManagementService;
-import com.project.user_management.features.users.dto.request.SignupRequest;
+import com.project.user_management.features.admin.adminUserManagement.dto.request.CreateUserRequest;
+import com.project.user_management.features.admin.adminUserManagement.dto.request.UpdateUserRequest;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.UserListResponse;
+import com.project.user_management.features.admin.adminUserManagement.service.AdminUserManagementService;
 import com.project.user_management.security.JWT.JWTUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

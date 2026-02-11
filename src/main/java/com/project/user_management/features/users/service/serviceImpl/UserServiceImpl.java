@@ -8,7 +8,7 @@ import com.project.user_management.data.models.Role;
 import com.project.user_management.data.models.User;
 import com.project.user_management.data.respositories.RoleRepository;
 import com.project.user_management.data.respositories.UserRepository;
-import com.project.user_management.features.adminUserManagement.dto.response.UserInfoResponse;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.UserInfoResponse;
 import com.project.user_management.features.users.dto.request.LoginRequest;
 import com.project.user_management.features.users.dto.request.SignupRequest;
 import com.project.user_management.features.users.dto.response.LoginResponse;

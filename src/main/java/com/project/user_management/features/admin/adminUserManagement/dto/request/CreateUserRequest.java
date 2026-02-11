@@ -1,4 +1,4 @@
-package com.project.user_management.features.adminUserManagement.dto.request;
+package com.project.user_management.features.admin.adminUserManagement.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

@@ -1,4 +1,4 @@
-package com.project.user_management.features.adminUserManagement.service.serviceImpl;
+package com.project.user_management.features.admin.adminUserManagement.service.serviceImpl;
 
 import com.project.user_management.common.constant.Status;
 import com.project.user_management.common.exceptions.BadRequestException;
@@ -16,18 +16,16 @@ import com.project.user_management.data.respositories.AdminUserManagementReposit
 import com.project.user_management.data.respositories.BanRecordRepository;
 import com.project.user_management.data.respositories.RoleRepository;
 import com.project.user_management.data.respositories.UserRepository;
-import com.project.user_management.features.adminUserManagement.dto.request.CreateUserRequest;
-import com.project.user_management.features.adminUserManagement.dto.request.UpdateUserRequest;
-import com.project.user_management.features.adminUserManagement.dto.response.CreateUserResponse;
-import com.project.user_management.features.adminUserManagement.dto.response.UpdateUserResponse;
-import com.project.user_management.features.adminUserManagement.dto.response.UserListResponse;
-import com.project.user_management.features.adminUserManagement.dto.response.UserResponse;
-import com.project.user_management.features.adminUserManagement.mapper.AdminUserManagementMapper;
-import com.project.user_management.features.adminUserManagement.service.AdminUserManagementService;
+import com.project.user_management.features.admin.adminUserManagement.dto.request.CreateUserRequest;
+import com.project.user_management.features.admin.adminUserManagement.dto.request.UpdateUserRequest;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.CreateUserResponse;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.UpdateUserResponse;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.UserListResponse;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.UserResponse;
+import com.project.user_management.features.admin.adminUserManagement.mapper.AdminUserManagementMapper;
+import com.project.user_management.features.admin.adminUserManagement.service.AdminUserManagementService;
 import com.project.user_management.security.JWT.JWTUtil;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,7 +43,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

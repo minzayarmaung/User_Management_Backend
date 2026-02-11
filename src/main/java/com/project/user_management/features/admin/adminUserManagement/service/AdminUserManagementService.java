@@ -1,10 +1,10 @@
-package com.project.user_management.features.adminUserManagement.service;
+package com.project.user_management.features.admin.adminUserManagement.service;
 
 import com.project.user_management.common.response.dto.ApiResponse;
 import com.project.user_management.common.response.dto.PaginatedApiResponse;
-import com.project.user_management.features.adminUserManagement.dto.request.CreateUserRequest;
-import com.project.user_management.features.adminUserManagement.dto.request.UpdateUserRequest;
-import com.project.user_management.features.adminUserManagement.dto.response.UserListResponse;
+import com.project.user_management.features.admin.adminUserManagement.dto.request.CreateUserRequest;
+import com.project.user_management.features.admin.adminUserManagement.dto.request.UpdateUserRequest;
+import com.project.user_management.features.admin.adminUserManagement.dto.response.UserListResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
