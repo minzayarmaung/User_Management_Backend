@@ -3,6 +3,8 @@ package com.project.user_management.features.admin.adminUserManagement.controlle
 import com.project.user_management.common.response.dto.ApiResponse;
 import com.project.user_management.common.response.dto.PaginatedApiResponse;
 import com.project.user_management.common.response.utils.ResponseUtils;
+import com.project.user_management.data.enums.UserRoleFilter;
+import com.project.user_management.data.enums.UserStatusFilter;
 import com.project.user_management.features.admin.adminUserManagement.dto.request.CreateUserRequest;
 import com.project.user_management.features.admin.adminUserManagement.dto.request.UpdateUserRequest;
 import com.project.user_management.features.admin.adminUserManagement.dto.response.UserListResponse;
@@ -129,29 +131,24 @@ public class AdminUserManagementController {
 
     @GetMapping
     public ResponseEntity<PaginatedApiResponse<UserListResponse>> getAllUsers(
-            @Parameter(description = "Search keyword")
             @RequestParam(required = false) String keyword,
-            @Parameter(description = "Page number (0-indexed)")
             @RequestParam(defaultValue = "0") @Min(0) int page,
-            @Parameter(description = "Page size")
             @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
-            @Parameter(description = "Sort field")
             @RequestParam(defaultValue = "id") String sortBy,
-            @Parameter(description = "Sort direction (ASC or DESC)")
             @RequestParam(defaultValue = "ASC") String sortDir,
-            @Parameter(description = "Include banned (inactive) users")
-            @RequestParam(defaultValue = "false") Boolean includeBanUsers,
-            @Parameter(description = "Include admin users")
-            @RequestParam(defaultValue = "false") Boolean includeAdmins
-            ) {
+            @RequestParam(defaultValue = "ALL") UserRoleFilter roleFilter,
+            @RequestParam(defaultValue = "ACTIVE_ONLY") UserStatusFilter statusFilter
+    ) {
 
-        Sort sort = sortDir.equalsIgnoreCase("DESC") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Sort sort = sortDir.equalsIgnoreCase("DESC")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        PaginatedApiResponse<UserListResponse> response = adminUserManagementService.getAllUsers(keyword, includeAdmins, includeBanUsers, pageable);
+        final PaginatedApiResponse<UserListResponse> response = adminUserManagementService.getAllUsers(keyword, roleFilter , statusFilter, pageable);
         return ResponseEntity.ok(response);
     }
-
 
     @Operation(
             summary = "Get user details by User ID",

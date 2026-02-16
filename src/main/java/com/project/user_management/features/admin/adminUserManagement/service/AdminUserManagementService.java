@@ -2,6 +2,8 @@ package com.project.user_management.features.admin.adminUserManagement.service;
 
 import com.project.user_management.common.response.dto.ApiResponse;
 import com.project.user_management.common.response.dto.PaginatedApiResponse;
+import com.project.user_management.data.enums.UserRoleFilter;
+import com.project.user_management.data.enums.UserStatusFilter;
 import com.project.user_management.features.admin.adminUserManagement.dto.request.CreateUserRequest;
 import com.project.user_management.features.admin.adminUserManagement.dto.request.UpdateUserRequest;
 import com.project.user_management.features.admin.adminUserManagement.dto.response.UserListResponse;
@@ -18,7 +20,12 @@ public interface AdminUserManagementService {
 
     ApiResponse banUser(Long id, @NotBlank String description, HttpServletRequest httpRequest);
 
-    PaginatedApiResponse<UserListResponse> getAllUsers(String keyword, boolean includeAdmins , boolean includeBanUsers , Pageable pageable);
+    PaginatedApiResponse<UserListResponse> getAllUsers(
+            String keyword,
+            UserRoleFilter roleFilter,
+            UserStatusFilter statusFilter,
+            Pageable pageable
+    );
 
     ApiResponse getUserById(Long id);
 

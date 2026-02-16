@@ -9,6 +9,8 @@ import com.project.user_management.common.response.dto.PaginatedApiResponse;
 import com.project.user_management.common.response.dto.PaginationMeta;
 import com.project.user_management.common.util.AuditHelper;
 import com.project.user_management.data.enums.ROLE;
+import com.project.user_management.data.enums.UserRoleFilter;
+import com.project.user_management.data.enums.UserStatusFilter;
 import com.project.user_management.data.models.BanRecord;
 import com.project.user_management.data.models.Role;
 import com.project.user_management.data.models.User;
@@ -189,29 +191,45 @@ public class AdminUserManagementServiceImpl implements AdminUserManagementServic
     @Transactional(readOnly = true)
     public PaginatedApiResponse<UserListResponse> getAllUsers(
             String keyword,
-            boolean includeAdmins,
-            boolean includeBanUsers,
+            UserRoleFilter roleFilter,
+            UserStatusFilter statusFilter,
             Pageable pageable
     ) {
 
         Specification<User> spec = (root, query, cb) -> {
+
             List<Predicate> predicates = new ArrayList<>();
 
-            boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
+            // 🔹 Role Filtering
+            switch (roleFilter) {
+                case ONLY_ADMINS ->
+                        predicates.add(cb.equal(root.get("role").get("name"), ROLE.ADMIN.name()));
 
-            // Exclude admins if flag is false
-            if (!includeAdmins) {
-                predicates.add(cb.notEqual(root.get("role").get("name"), ROLE.ADMIN.name()));
+                case ONLY_USERS ->
+                        predicates.add(cb.notEqual(root.get("role").get("name"), ROLE.ADMIN.name()));
+
+                case ALL -> {
+                    // do nothing
+                }
             }
 
-            // Exclude inactive if flag is false
-            if (!includeBanUsers) {
-                predicates.add(cb.notEqual(root.get("status"), Status.INACTIVE));
+            // 🔹 Status Filtering
+            switch (statusFilter) {
+                case ACTIVE_ONLY ->
+                        predicates.add(cb.notEqual(root.get("status"), Status.INACTIVE));
+
+                case BANNED_ONLY ->
+                        predicates.add(cb.equal(root.get("status"), Status.INACTIVE));
+
+                case ALL -> {
+                    // do nothing
+                }
             }
 
-            // Keyword search
-            if (hasKeyword) {
+            // 🔹 Keyword Search
+            if (keyword != null && !keyword.trim().isEmpty()) {
                 String likePattern = "%" + keyword.toLowerCase() + "%";
+
                 predicates.add(cb.or(
                         cb.like(cb.lower(root.get("username")), likePattern),
                         cb.like(cb.lower(root.get("email")), likePattern)
